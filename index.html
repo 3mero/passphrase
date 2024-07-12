@@ -268,6 +268,61 @@
         body.dark-mode .password-container button {
             color: #ff6b6b;
         }
+        .language-menu {
+            display: none;
+            position: absolute;
+            top: 2rem;
+            left: 35rem;
+            background-color: #333;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 10px 6px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            text-align: left;
+            z-index: 1000;
+            max-width: 1000px;
+            max-height: 700px;
+            overflow-y: auto;
+            flex-wrap: wrap;
+            width: 150px;
+        }
+
+        .language-menu label {
+            display: block;
+            margin: 0.5rem 0;
+            width: 45%;
+            color: white;
+        }
+
+        #languageButton {
+            margin-top: 1rem;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #languageButton:hover {
+            background-color: #007B9A;
+        }
+
+        #closeLanguageMenu {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            width: 100%;
+            text-align: right;
+        }
+
+        .language-menu label.selected {
+            background-color: #ffdddd;
+        }
     </style>
 </head>
 <body>
@@ -277,11 +332,25 @@
         <h1 id="mainTitle">Password Generator</h1>
         <p id="instructionText">Enter text to generate a password:</p>
         <textarea id="inputText" rows="3"></textarea>
-        <input type="number" id="passwordLength" min="8" max="32" placeholder="Enter password length (8-32)" />
+        <input type="range" id="passwordLength" min="8" max="100" value="8" oninput="updatePasswordLengthLabel()" />
+        <label for="passwordLength" id="passwordLengthLabel">8</label>
         <div class="button-group">
             <button id="uniquePassword" onclick="setPasswordType('unique')" class="active">Unique Password</button>
             <button id="complexPassword" onclick="setPasswordType('complex')">Complex Password</button>
         </div>
+
+        <button id="languageButton" onclick="toggleLanguageMenu()">🌐 (More) Languages</button>
+        <div id="languageMenu" class="language-menu">
+            <button id="closeLanguageMenu" onclick="toggleLanguageMenu()">✖</button>
+            <label><input type="checkbox" id="arabic" onclick="toggleLanguageSelection(this)"> Arabic</label>
+            <label><input type="checkbox" id="german" onclick="toggleLanguageSelection(this)"> German</label>
+            <label><input type="checkbox" id="spanish" onclick="toggleLanguageSelection(this)"> Spanish</label>
+            <label><input type="checkbox" id="russian" onclick="toggleLanguageSelection(this)"> Russian</label>
+            <label><input type="checkbox" id="japanese" onclick="toggleLanguageSelection(this)"> Japanese</label>
+            <label><input type="checkbox" id="chinese" onclick="toggleLanguageSelection(this)"> Chinese</label>
+            <label><input type="checkbox" id="french" onclick="toggleLanguageSelection(this)"> French</label>
+        </div>
+
         <button onclick="generatePassword()" id="generateButton">Generate Password</button>
         <div class="password-container">
             <input type="password" id="passwordOutput" readonly>
@@ -329,7 +398,8 @@
                 recoveryContentType: "Type",
                 uniqueType: "Unique",
                 complexType: "Complex",
-                hideText: "HIDE"
+                hideText: "HIDE",
+                selectedLanguages: "Selected Languages",
             },
             ar: {
                 mainTitle: "مولد كلمة المرور",
@@ -349,10 +419,21 @@
                 recoveryContentType: "النوع",
                 uniqueType: "سهلة",
                 complexType: "معقدة",
-                hideText: "إخفاء"
+                hideText: "إخفاء",
+                selectedLanguages: "اللغات المختارة",
             }
         };
 
+        const arabicChars = 'ابتثجحخدذرزسشصضطظعغفقكلمنهوي';
+        const englishChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        const germanChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzäöüß';
+        const spanishChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzáéíñóúü';
+        const russianChars = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя';
+        const japaneseChars = 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん';
+        const chineseChars = '的一是不了人我在有他这中大来上个国到说们为子和你地出道也时年得就那要下以生会自着去之过家学对可她里后用心';
+        const frenchChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzàâäçéèêëîïôùûüÿ';
+      
+      
         const setPasswordType = (type) => {
             currentPasswordType = type;
             document.getElementById('uniquePassword').classList.toggle('active', type === 'unique');
@@ -391,20 +472,42 @@
                 showNotification('Please enter text to generate a password.');
                 return;
             }
-            if (isNaN(passwordLength) || passwordLength < 8 || passwordLength > 32) {
-                showNotification('Please enter a valid password length (8-32).');
+            if (isNaN(passwordLength) || passwordLength < 1 || passwordLength > 100) {
+                showNotification('Please enter a valid password length (1-100).');
                 return;
             }
-            
+
+            const selectedLanguages = [
+                { checkbox: 'arabic', name: 'Arabic', chars: arabicChars },
+
+                { checkbox: 'german', name: 'German', chars: germanChars },
+                { checkbox: 'spanish', name: 'Spanish', chars: spanishChars },
+                { checkbox: 'russian', name: 'Russian', chars: russianChars },
+                { checkbox: 'japanese', name: 'Japanese', chars: japaneseChars },
+                { checkbox: 'chinese', name: 'Chinese', chars: chineseChars },
+                { checkbox: 'french', name: 'French', chars: frenchChars },
+                  
+            ];
+
+            const enabledChars = selectedLanguages
+                .filter(language => document.getElementById(language.checkbox).checked)
+                .map(language => language.chars)
+                .join('') || englishChars;
+
+            const enabledLanguages = selectedLanguages
+                .filter(language => document.getElementById(language.checkbox).checked)
+                .map(language => language.name)
+                .join(', ');
+
             const hashedValue = complexHash(inputText);
             const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
             const numberChars = '0123456789';
             const symbolChars = '!@#$%^&*()_+[]{}|;:,.<>?';
-            const allChars = uppercaseChars + lowercaseChars + numberChars + symbolChars;
-            
+            const allChars = uppercaseChars + lowercaseChars + numberChars + symbolChars + enabledChars;
+
             let password = '';
-            
+
             password += uppercaseChars[parseInt(hashedValue.substr(0, 2), 16) % uppercaseChars.length];
             password += lowercaseChars[parseInt(hashedValue.substr(2, 2), 16) % lowercaseChars.length];
             password += numberChars[parseInt(hashedValue.substr(4, 2), 16) % numberChars.length];
@@ -422,7 +525,14 @@
             }
 
             document.getElementById('passwordOutput').value = password;
-            document.getElementById('recoveryContent').textContent = `${translations[currentLanguage].recoveryContentInput}: ${inputText}, ${translations[currentLanguage].recoveryContentLength}: ${passwordLength}, ${translations[currentLanguage].recoveryContentType}: ${passwordType === 'unique' ? translations[currentLanguage].uniqueType : translations[currentLanguage].complexType}`;
+
+            let recoveryContent = `${translations[currentLanguage].recoveryContentInput}: ${inputText}, ${translations[currentLanguage].recoveryContentLength}: ${passwordLength}, ${translations[currentLanguage].recoveryContentType}: ${passwordType === 'unique' ? translations[currentLanguage].uniqueType : translations[currentLanguage].complexType}`;
+    
+            if (enabledLanguages) {
+                recoveryContent += `, ${translations[currentLanguage].selectedLanguages}: ${enabledLanguages}`;
+            }
+
+            document.getElementById('recoveryContent').textContent = recoveryContent;
             document.getElementById('recoveryBox').style.display = 'block';
         };
 
@@ -493,11 +603,38 @@
             }
         };
 
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('aboutModal')) {
-                closeAboutModal();
+        const updatePasswordLengthLabel = () => {
+            const passwordLength = document.getElementById('passwordLength').value;
+            document.getElementById('passwordLengthLabel').textContent = passwordLength;
+        };
+
+        const toggleLanguageSelection = (checkbox) => {
+            const label = checkbox.parentElement;
+            if (checkbox.checked) {
+                label.classList.add('selected');
+            } else {
+                label.classList.remove('selected');
             }
         };
+
+const toggleLanguageMenu = () => {
+    const menu = document.getElementById('languageMenu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+};
+
+
+window.onclick = function(event) {
+    if (event.target.matches('#closeLanguageMenu')) {
+        const menu = document.getElementById('languageMenu');
+        if (menu.style.display === 'block') {
+            menu.style.display = 'none';
+        }
+    }
+
+    if (event.target == document.getElementById('aboutModal')) {
+        closeAboutModal();
+    }
+};
 
         updateTexts();
     </script>
