@@ -379,50 +379,51 @@
         let currentLanguage = 'en';
         let currentPasswordType = 'unique';
 
-        const translations = {
-            en: {
-                mainTitle: "Password Generator",
-                instructionText: "Enter text to generate a password:",
-                generateButton: "Generate Password",
-                uniquePassword: "Unique Password",
-                complexPassword: "Complex Password",
-                copyButton: "Copy Password",
-                copiedMessage: "Password copied to clipboard!",
-                aboutButton: "About Us",
-                aboutText: "Hello, I am Omar. This page is not linked to any entity, it is public, very simple and easy to use. You can check the project on GitHub. There are no libraries in it, just simple codes that will generate a password that can be configured from 8 to 32 letters, numbers and symbols.The goal is to generate the same password for that added phrase, whether it is a link, a name, an address, or something that you can save for recovery in case you forget it. This is the purpose of this page, which is devoid of any link. You can download the page, use it, and change its algorithms to increase the complexity of the password. You are free to do so.",
-                recoveryBox: "Recovery Box:",
-                recoveryWarning: "(It is preferable to memorize it in your mind, copy it only if necessary)",
-                copyRecoveryButton: "Copy Recovery Content",
-                recoveryContentInput: "Input",
-                recoveryContentLength: "Length",
-                recoveryContentType: "Type",
-                uniqueType: "Unique",
-                complexType: "Complex",
-                hideText: "HIDE",
-                selectedLanguages: "Selected Languages",
-            },
-            ar: {
-                mainTitle: "مولد كلمة المرور",
-                instructionText: "أدخل النص لتوليد كلمة المرور:",
-                generateButton: "توليد كلمة المرور",
-                uniquePassword: "كلمة مرور سهلة",
-                complexPassword: "كلمة مرور معقدة",
-                copyButton: "نسخ كلمة المرور",
-                copiedMessage: "تم نسخ كلمة المرور إلى الحافظة!",
-                aboutButton: "عن الموقع",
-                aboutText: "مرحبا، أنا عمر. هذه الصفحة ليست متصلة بأي كيان، إنها عامة وبسيطة للغاية وسهلة الاستخدام. يمكنكم التحقق من المشروع على جيت هاب. لا توجد مكتبات بها، فقط رموز بسيطة ستولد كلمة مرور يمكن تكوينها من 8 الى 32 حرف ورقم ورمز . الهدف هو توليد نفس كلمة المرور لتلك العبارة المضافة، سواء كانت رابطًا أو اسمًا أو عنوانًا أو أي شيء يمكنك حفظه للاسترجاع في حال نسيانه. هذا الغرض من هذه الصفحة التي تخلو من أي ارتباط. يمكنك تحميل الصفحة واستخدامها وتغيير خوارزمياتها لزيادة تعقيد كلمة المرور. أنت حر في ذلك.",                
-                recoveryBox: "صندوق الاستعادة:",
-                recoveryWarning: "(يفضل أن تحفظه في ذهنك، ولا تنسخه إلا عند الضرورة)",
-                copyRecoveryButton: "نسخ محتوى الاستعادة",
-                recoveryContentInput: "النص",
-                recoveryContentLength: "الطول",
-                recoveryContentType: "النوع",
-                uniqueType: "سهلة",
-                complexType: "معقدة",
-                hideText: "إخفاء",
-                selectedLanguages: "اللغات المختارة",
-            }
-        };
+const translations = {
+    en: {
+        mainTitle: "Password Generator",
+        instructionText: "Enter text to generate a password:",
+        generateButton: "Generate Password",
+        uniquePassword: "Unique Password",
+        complexPassword: "Complex Password",
+        copyButton: "Copy Password",
+        copiedMessage: "Password copied to clipboard!",
+        aboutButton: "About Us",
+        aboutText: `Hello, I am Omar. This page is not linked to any entity, it is public, very simple and easy to use. You can check the project on <a href="https://github.com/3mero/pg" target="_blank">GitHub</a>. There are no libraries in it, just simple codes that will generate a password that can be configured from 8 to 32 letters, numbers and symbols. The goal is to generate the same password for that added phrase, whether it is a link, a name, an address, or something that you can save for recovery in case you forget it. This is the purpose of this page, which is devoid of any link. You can download the page, use it, and change its algorithms to increase the complexity of the password. You are free to do so.`,
+        recoveryBox: "Recovery Box:",
+        recoveryWarning: "(It is preferable to memorize it in your mind, copy it only if necessary)",
+        copyRecoveryButton: "Copy Recovery Content",
+        recoveryContentInput: "Input",
+        recoveryContentLength: "Length",
+        recoveryContentType: "Type",
+        uniqueType: "Unique",
+        complexType: "Complex",
+        hideText: "HIDE",
+        selectedLanguages: "Selected Languages",
+    },
+    ar: {
+        mainTitle: "مولد كلمة المرور",
+        instructionText: "أدخل النص لتوليد كلمة المرور:",
+        generateButton: "توليد كلمة المرور",
+        uniquePassword: "كلمة مرور سهلة",
+        complexPassword: "كلمة مرور معقدة",
+        copyButton: "نسخ كلمة المرور",
+        copiedMessage: "تم نسخ كلمة المرور إلى الحافظة!",
+        aboutButton: "عن الموقع",
+        aboutText: `مرحبا، أنا عمر. هذه الصفحة ليست متصلة بأي كيان، إنها عامة وبسيطة للغاية وسهلة الاستخدام. يمكنكم التحقق من المشروع على <a href="https://github.com/3mero/pg" target="_blank">جيت هاب</a>. لا توجد مكتبات بها، فقط رموز بسيطة ستولد كلمة مرور يمكن تكوينها من 8 الى 32 حرف ورقم ورمز . الهدف هو توليد نفس كلمة المرور لتلك العبارة المضافة، سواء كانت رابطًا أو اسمًا أو عنوانًا أو أي شيء يمكنك حفظه للاسترجاع في حال نسيانه. هذا الغرض من هذه الصفحة التي تخلو من أي ارتباط. يمكنك تحميل الصفحة واستخدامها وتغيير خوارزمياتها لزيادة تعقيد كلمة المرور. أنت حر في ذلك.`,
+        recoveryBox: "صندوق الاستعادة:",
+        recoveryWarning: "(يفضل أن تحفظه في ذهنك، ولا تنسخه إلا عند الضرورة)",
+        copyRecoveryButton: "نسخ محتوى الاستعادة",
+        recoveryContentInput: "النص",
+        recoveryContentLength: "الطول",
+        recoveryContentType: "النوع",
+        uniqueType: "سهلة",
+        complexType: "معقدة",
+        hideText: "إخفاء",
+        selectedLanguages: "اللغات المختارة",
+    }
+};
+
 
         const arabicChars = 'ابتثجحخدذرزسشصضطظعغفقكلمنهوي';
         const englishChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -567,6 +568,7 @@
             document.getElementById('recoveryWarning').textContent = translations[currentLanguage].recoveryWarning;
             document.getElementById('hideButton').textContent = translations[currentLanguage].hideText;
             document.getElementById('copyButton').textContent = translations[currentLanguage].copyButton;
+              document.getElementById('aboutText').innerHTML = translations[currentLanguage].aboutText;
         };
 
         const openAboutModal = () => {
